@@ -5,17 +5,16 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Chess.Figures;
-using Point = System.Windows.Point;
 
 namespace Chess.Pieces;
 
-public sealed class Pawn : Piece
+public sealed class Knight : Piece
 {
     private readonly Ellipse _ellipse;
-    private readonly TextBlock _textBlock = new(){Text = "P", TextAlignment = TextAlignment.Center};
-    public Pawn(Point point, Side side, Canvas canvas) : base(side, point, canvas)
+    private readonly TextBlock _textBlock = new(){Text = "K", TextAlignment = TextAlignment.Center};
+    public Knight(Point point,Side side, Canvas canvas) : base(side, point, canvas)
     {
-        var mySolidColorBrush = new SolidColorBrush
+    var mySolidColorBrush = new SolidColorBrush
         {
             Color = Side == Side.Black ? Colors.Black : Colors.White
         };
@@ -30,38 +29,36 @@ public sealed class Pawn : Piece
         Redraw();
         Draw();
     }
-    
+
     public override IEnumerable<Point> PossibleMoves(Board board)
     {
-        
         IList<Point> moves = new List<Point>();
-        //diagonal-1
-        var free = board.Boardlist.Any(x =>
-            x.Position.Equals(Point.Add(Position, new Vector(1, Side == Side.Black ? 1 : -1)))&& Side != x.Side);
-        if(free)
-            moves.Add(Point.Add(Position, new Vector(1, Side == Side.Black ? 1 : -1)));
-        //diagonal-2
-        free = board.Boardlist.Any(x =>
-            x.Position.Equals(Point.Add(Position, new Vector(-1, Side == Side.Black ? 1 : -1))) && Side != x.Side);
-        if(free)
-            moves.Add(Point.Add(Position, new Vector(-1, Side == Side.Black ? 1 : -1)));
-        //1-up
-        free = !board.Boardlist.Any(x =>
-            x.Position.Equals(Point.Add(Position, new Vector(0, Side == Side.Black ? 1 : -1))));
-        if (free)
-            moves.Add(Point.Add(Position, new Vector(0,Side == Side.Black ? 1 : -1)));
-        else
-        {
-            return moves;
-        }
-        //2-up
-        free = !board.Boardlist.Any(x =>
-            x.Position.Equals(Point.Add(Position, new Vector(0, Side == Side.Black ? 2 : -2))) ||
-            (int)Position.Y != (Side == Side.Black ? 1 : 6));
-        if (free)
-            moves.Add(Point.Add(Position, new Vector(0,Side == Side.Black ? 2 : -2)));
-        
+        var point = Point.Add(Position, new Vector(2, 1));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(-2, 1));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(2, -1));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(-2, -1));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(1, 2));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(-1, 2));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(1, -2));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
+        point = Point.Add(Position, new Vector(-1, -2));
+        if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
+            moves.Add(point);
         return moves.Where(x => x.Y is < 8 and >= 0 && x.X is < 8 and >= 0);
+
     }
 
     public override void Redraw()
@@ -89,5 +86,4 @@ public sealed class Pawn : Piece
         Canvas.Children.Remove(_ellipse);
         Canvas.Children.Remove(_textBlock);
     }
-    
 }

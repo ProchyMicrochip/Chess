@@ -1,67 +1,90 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Chess.Figures;
 using Chess.Pieces;
 
 namespace Chess;
 
 public class Board
 {
-    public List<Piece> Boardlist = new();
-    private Canvas _canvas;
+    public readonly ObservableCollection<Piece> Boardlist = new();
+    private readonly Canvas _canvas;
     private Piece _selected;
-    
+    private List<Ellipse> _possiblemoves = new();
 
     public Board(Canvas canvas)
     {
         _canvas = canvas;
     }
+    
     public void Add(Piece piece)
     {
         Boardlist.Add(piece);
     }
 
-    public void Select(Point point)
+    public void Select(Point point, Side current)
     {
-        _selected = Boardlist.FirstOrDefault(x => x.Position.Equals(point));
+        if(Boardlist.Any(x => x.Position.Equals(point) && x.Side == current))
+            _selected = Boardlist.FirstOrDefault(x => x.Position.Equals(point) && x.Side == current);
         if (_selected == null) return;
-        DrawPieces();
         DrawPosibleMoves();
     }
 
-    private void DrawPosibleMoves()
+    public void Redraw()
     {
-        foreach (var move in _selected.PossibleMoves(this))
-        {
-            var ellipse = new Ellipse{Fill = Brushes.SpringGreen};
-            Canvas.SetLeft(ellipse, _canvas.ActualHeight/8*move.X+10);
-            Canvas.SetTop(ellipse, _canvas.ActualWidth/8*move.Y+10);
-            ellipse.Height = _canvas.ActualHeight/8-20;
-            ellipse.Width = _canvas.ActualWidth/8-20;
-            _canvas.Children.Add(ellipse);
-        }
-    }
-
-    public void DrawPieces()
-    {
-        _canvas.Children.Clear();
         foreach (var piece in Boardlist)
         {
-            piece.Draw(_canvas);
+            piece.Redraw();
+        }
+    }
+    private void DrawPosibleMoves()
+    {
+        if (_possiblemoves != null)
+            foreach (var possiblemove in _possiblemoves)
+            {
+                _canvas.Children.Remove(possiblemove);
+            }
+
+        _possiblemoves = _selected?.PossibleMoves(this).Select(x => {  var ellipse = new Ellipse{Fill = Brushes.SpringGreen};
+            Canvas.SetLeft(ellipse, _canvas.ActualHeight/8*x.X+10);
+            Canvas.SetTop(ellipse, _canvas.ActualWidth/8*x.Y+10);
+            ellipse.Height = _canvas.ActualHeight/8-20;
+            ellipse.Width = _canvas.ActualWidth/8-20;
+            return ellipse;
+        }).ToList();
+        if (_possiblemoves == null) return;
+        {
+            foreach (var possiblemove in _possiblemoves)
+            {
+                _canvas.Children.Add(possiblemove);
+            }
         }
     }
 
-    public void Move(Point point)
+    
+    
+    public bool Move(Point point)
     {
-        if(_selected == null) return;
-        if (_selected.PossibleMoves(this).Any(x => x.Equals(point)))
+        if(_selected == null) return false;
+        if (!_selected.PossibleMoves(this).Any(x => x.Equals(point))) return false;
         {
-            Boardlist.Remove(Boardlist.Find(x => x.Position.Equals(point)));
+            var remove = Boardlist.FirstOrDefault(x => x.Position.Equals(point));
+            if (remove != null)
+            {
+                remove.Remove();
+                Boardlist.Remove(remove);
+            }
+
             _selected.Position = point;
+            _selected = null;
+            DrawPosibleMoves();
+            return true;
         }
-        DrawPieces();
+        
     }
 }

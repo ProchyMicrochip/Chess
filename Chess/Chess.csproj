@@ -61,6 +61,7 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Include="Board.cs" />
+        <Compile Include="Pieces\Knight.cs" />
         <Compile Include="Pieces\Pawn.cs" />
         <Compile Include="Pieces\Piece.cs" />
         <Compile Include="Pieces\Side.cs" />
@@ -70,6 +71,7 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Properties\Annotations.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>
@@ -85,6 +87,9 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Pieces\bitmaps" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
