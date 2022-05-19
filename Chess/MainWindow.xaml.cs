@@ -41,6 +41,19 @@ namespace Chess
             _board.Add(new Knight(new Point(6,0),Side.Black,Canvas));
             _board.Add(new Knight(new Point(1,7),Side.White,Canvas));
             _board.Add(new Knight(new Point(6,7),Side.White,Canvas));
+            _board.Add(new King(new Point(4,0),Side.Black,Canvas));
+            _board.Add(new King(new Point(4,7),Side.White,Canvas));
+            _board.Add(new Queen(new Point(3,0),Side.Black,Canvas));
+            _board.Add(new Queen(new Point(3,7),Side.White,Canvas));
+            _board.Add(new Rook(new Point(0,0),Side.Black,Canvas));
+            _board.Add(new Rook(new Point(7,0),Side.Black,Canvas));
+            _board.Add(new Rook(new Point(0,7),Side.White,Canvas));
+            _board.Add(new Rook(new Point(7,7),Side.White,Canvas));
+            _board.Add(new Bishop(new Point(2,0),Side.Black,Canvas));
+            _board.Add(new Bishop(new Point(5,0),Side.Black,Canvas));
+            _board.Add(new Bishop(new Point(2,7),Side.White,Canvas));
+            _board.Add(new Bishop(new Point(5,7),Side.White,Canvas));
+            
         }
 
         private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)

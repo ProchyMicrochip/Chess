@@ -8,11 +8,11 @@ using Chess.Figures;
 
 namespace Chess.Pieces;
 
-public sealed class Knight : Piece
+public sealed class King : Piece
 {
-    private readonly Ellipse _ellipse;
-    private readonly TextBlock _textBlock = new(){Text = "k", TextAlignment = TextAlignment.Center};
-    public Knight(Point point,Side side, Canvas canvas) : base(side, point, canvas)
+     private readonly Ellipse _ellipse;
+    private readonly TextBlock _textBlock = new(){Text = "K", TextAlignment = TextAlignment.Center};
+    public King(Point point,Side side, Canvas canvas) : base(side, point, canvas)
     {
     var mySolidColorBrush = new SolidColorBrush
         {
@@ -33,30 +33,32 @@ public sealed class Knight : Piece
     public override IEnumerable<Point> PossibleMoves(Board board)
     {
         IList<Point> moves = new List<Point>();
-        var point = Point.Add(Position, new Vector(2, 1));
+        var point = Point.Add(Position, new Vector(1, 1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(-2, 1));
+        point = Point.Add(Position, new Vector(0, 1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(2, -1));
+        point = Point.Add(Position, new Vector(-1, 1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(-2, -1));
+        point = Point.Add(Position, new Vector(1, 0));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(1, 2));
+        point = Point.Add(Position, new Vector(-1, 0));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(-1, 2));
+        point = Point.Add(Position, new Vector(1, -1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(1, -2));
+        point = Point.Add(Position, new Vector(0, -1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
-        point = Point.Add(Position, new Vector(-1, -2));
+        point = Point.Add(Position, new Vector(-1, -1));
         if(!board.Boardlist.Any(x => x.Position.Equals(point) && x.Side == Side))
             moves.Add(point);
+        //TODO: ROSADA
+        
         return moves.Where(x => x.Y is < 8 and >= 0 && x.X is < 8 and >= 0);
 
     }
